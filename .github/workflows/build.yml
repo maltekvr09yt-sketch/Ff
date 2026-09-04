@@ -1,0 +1,30 @@
+name: Build Plugin
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+
+      - name: Ustaw Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Zbuduj plugin
+        run: mvn clean package
+
+      - name: Udostępnij JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: ServerTeleport
+          path: target/*.jar
