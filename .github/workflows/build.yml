@@ -14,17 +14,27 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Ustaw Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
-          cache: maven
+
+      - name: Znajdź pom.xml
+        run: |
+          find . -name pom.xml -print
 
       - name: Zbuduj plugin
-        run: mvn clean package
+        run: |
+          POM=$(find . -name pom.xml | head -n 1)
+          if [ -z "$POM" ]; then
+            echo "BLAD: Nie znaleziono pom.xml!"
+            exit 1
+          fi
+          echo "Znaleziono: $POM"
+          mvn -f "$POM" clean package
 
       - name: Udostępnij JAR
         uses: actions/upload-artifact@v4
         with:
           name: ServerTeleport
-          path: target/*.jar
+          path: "**/target/*.jar"
