@@ -1,0 +1,5 @@
+name: ServerTeleport
+version: 1.0.0
+main: pl.reniferek.servertp.ServerTeleport
+api-version: '1.21'
+
